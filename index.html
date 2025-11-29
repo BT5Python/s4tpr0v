@@ -1,332 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PUSLAT KODIKLATAU - Intelligence Database</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upload ke Google Drive — GitHub Pages</title>
 <style>
-body {
-    font-family: 'Courier New', monospace;
-    background-color: black;
-    color: #00FF00;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-header {
-    background-color: black;
-    color: #00FF00;
-    padding: 20px;
-    text-align: center;
-}
-.text { font-size: 75px; }
-.text1 { font-size: 30px; }
-
-.main-container {
-    display: flex;
-    flex: 1;
-    border-top: 1px solid #00FF00;
-}
-.search-panel {
-    width: 35%;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    border-right: 2px solid #00FF00;
-}
-.search-panel h2 { text-align: center; margin-bottom: 20px; }
-
-input {
-    background: transparent;
-    border: 1px solid #00FF00;
-    color: #00FF00;
-    padding: 10px;
-    margin-bottom: 15px;
-    font-size: 16px;
-    border-radius: 4px;
-    outline: none;
-}
-
-.info-text { font-size: 14px; text-align: center; margin-top: 10px; }
-
-#member-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.output-panel {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    border-left: 2px solid #00FF00;
-}
-
-.agent-profile {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    flex-wrap: wrap;
-}
-
-.agent-profile pre {
-    flex: 1;
-    white-space: pre-wrap;
-    line-height: 1.4;
-}
-
-.agent-profile img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border: 2px solid #00FF00;
-    border-radius: 8px;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.6s ease-in-out;
-}
-
-.not-found { color: #FF0000; font-weight: bold; }
-
-.agent-profile button,
-#member-buttons button {
-    background: transparent;
-    border: 1px solid #00FF00;
-    color: #00FF00;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    transition: background 0.3s, color 0.3s;
-}
-
-.agent-profile button:hover,
-#member-buttons button:hover {
-    background-color: #00FF00;
-    color: black;
-}
-
-@media (max-width: 768px) {
-    .main-container { flex-direction: column; }
-    .search-panel, .output-panel { width: 100%; border: none; border-bottom: 1px solid #00FF00; }
-    .agent-profile { flex-direction: column; align-items: center; }
-}
-
-/* cursor blink */
-.agent-profile pre::after {
-    content: "_";
-    animation: blink 1s infinite;
-}
-@keyframes blink {
-    0%, 50%, 100% { opacity: 1; }
-    25%, 75% { opacity: 0; }
-}
+:root{--bg:#000;--accent:#00ff00;--muted:#9aa0a6;--glass: rgba(255,255,255,0.03);}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,sans-serif;background:linear-gradient(180deg,#000,#050505);color:#00ff00}
+.wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:40px}
+.card{width:100%;max-width:900px;background:var(--glass);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:26px;box-shadow:0 6px 30px rgba(0,0,0,0.6)}
+header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.logo{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#0d0d0d;border:1px solid rgba(255,255,255,0.05)}
+.logo b{color:var(--accent);font-size:20px}
+h1{margin:0;font-size:20px}
+.uploader{display:grid;grid-template-columns:1fr 300px;gap:20px}
+@media(max-width:850px){.uploader{grid-template-columns:1fr}}
+.drop{background:rgba(255,255,255,0.03);border-radius:10px;border:1px dashed rgba(255,255,255,0.08);padding:22px;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.2s;cursor:pointer}
+.drop.dragover{border-color:var(--accent);transform:translateY(-4px)}
+.hint{color:var(--muted);text-align:center;margin-top:8px}
+.controls{display:flex;gap:10px;margin-top:10px}
+.btn{padding:10px 14px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:#00ff00;cursor:pointer;font-weight:600}
+.btn.primary{background:linear-gradient(90deg,rgba(29,185,84,0.2),rgba(29,185,84,0.1));border-color:rgba(29,185,84,0.25)}
+input[type=file]{display:none}
+.side{background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.05);padding:16px}
+.file-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.file-item{padding:8px;border-radius:8px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center}
+.small{font-size:12px;color:#00ff00}
+footer{margin-top:16px;display:flex;justify-content:space-between;align-items:center;color:#00ff00;font-size:13px}
+/* RUNNING TEXT */
+.running-text{width:100%;overflow:hidden;white-space:nowrap;border-bottom:1px solid rgba(255,0,0,0.3);margin-bottom:14px;padding:6px 0}
+.running-text span{display:inline-block;padding-left:100%;color:#ff3333;font-weight:700;animation:marquee 12s linear infinite;letter-spacing:1px}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+#progressBarContainer{width:100%;background:rgba(255,255,255,0.05);height:10px;border-radius:20px;overflow:hidden;margin-top:14px;display:none}
+#progressBar{height:100%;width:0%;background:#00ff00;transition:0.3s}
 </style>
 </head>
 <body>
-<header>
-    <h1 class="text">PUSLAT KODIKLATAU</h1>
-    <h1 class="text1">INTELLIGENCE DATABASE TERMINAL</h1>
-</header>
 
-<div class="main-container">
-    <div class="search-panel">
-        <h2>🔍 Data Lookup</h2>
-        <label for="search">Masukkan Keyword Unit / Nama Lengkap:</label>
-        <input type="text" id="search" placeholder="Contoh: ">
-        <p class="info-text">⚠️ Ketik keyword lalu tekan ENTER untuk menampilkan daftar anggota.</p>
-        <div id="member-buttons"></div>
+<div class="wrap">
+  <div class="card">
+
+    <div class="running-text">
+      <span>PERHATIAN: PASTIKAN FILE YANG DIUPLOAD SESUAI FORMAT DAN TIDAK MELEBIHI BATAS!</span>
     </div>
 
-    <div class="output-panel" id="output">
-        <div class="agent-profile" id="agent-container">
-            <pre id="agent-dossier">
-⚠️ Biodata akan muncul setelah klik tombol anggota.
-            </pre>
-            <img id="agent-photo" src="" alt="Agent Photo">
+    <header>
+      <div class="logo"><b>UP</b></div>
+      <div>
+        <h2 style="color:#00ff00; margin:4px 0 0 0; font-weight:600;">PROGAR PUSLAT KODIKLATAU</h2>
+        <h1>PROGAR PUSLAT KODIKLATAU</h1>        
+        <p class="small">TOR - RENPROGJA - PROGJA - RENLAKGIAT - LAP. EVALUASI SEMESTER I / AKHIR TAHUN</p>
+      </div>
+   </header>
+
+
+    <section class="uploader">
+      <div>
+        <div id="drop" class="drop">
+          <svg width="64" height="64" fill="none" stroke="currentColor">
+            <path d="M12 3v10" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8 7l4-4 4 4" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M21 15v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <div class="hint">
+            <div style="font-weight:700; color: #00ff00">Tarik & lepaskan file di sini</div>
+            <div class="small">atau gunakan tombol di bawah</div>
+            <div class="controls">
+              <label class="btn primary" for="fileInput">Pilih File</label>
+              <button class="btn" id="clearBtn">Bersihkan</button>
+              <input id="fileInput" type="file" multiple>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <aside class="side">
+        <strong>File dipilih</strong>
+        <p class="small">Daftar file yang akan diupload.</p>
+        <ul id="fileList" class="file-list"></ul>
+        <footer>
+          <span id="count">0 file</span>
+          <button id="uploadBtn" class="btn primary">Upload</button>
+        </footer>
+      </aside>
+    </section>
+
+    <div id="progressBarContainer">
+      <div id="progressBar"></div>
     </div>
+
+  </div>
 </div>
 
 <script>
-const personnelDB = [
-    // ==== 4 anggota DISOPS ====
-    { nama_lengkap: "Endriady, S.H", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1979-05-03", kewarganegaraan: "Indonesia", tempat_lahir: "Subang", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-3", unit: "DISOPS", specialization: "Cyber Recon / Counterintelligence", alias: "Ghostline", ops_completed: 43, success_rate: 96, photo: "danpus pdh.jpg" },
-    { nama_lengkap: "Bima Pratama", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1980-06-15", kewarganegaraan: "Indonesia", tempat_lahir: "Jakarta", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-2", unit: "DISOPS", specialization: "Field Ops", alias: "Shadow Hawk", ops_completed: 39, success_rate: 92, photo: "https://i.pravatar.cc/150?img=14" },
-    { nama_lengkap: "Citra Sari", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Perempuan", tanggal_lahir: "1985-03-22", kewarganegaraan: "Indonesia", tempat_lahir: "Bandung", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-1", unit: "DISOPS", specialization: "Signal Intelligence", alias: "Night Owl", ops_completed: 41, success_rate: 95, photo: "https://i.pravatar.cc/150?img=15" },
-    { nama_lengkap: "Dedi Hartono", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1982-11-30", kewarganegaraan: "Indonesia", tempat_lahir: "Surabaya", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-4", unit: "DISOPS", specialization: "Recon Ops", alias: "Silver Fox", ops_completed: 37, success_rate: 90, photo: "https://i.pravatar.cc/150?img=16" },
-    
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxpxQIUEXrIColzUBaWkBCBRA7HmjY3kP6Mw9167xjOiboXOtWlyrizYmUU8Kn_lDSr/exec"; // ganti
 
-    // ==== 10 anggota DISPERS ====
-    { nama_lengkap: "Endriady, S.H", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1979-05-03", kewarganegaraan: "Indonesia", tempat_lahir: "Subang", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-3", unit: "DISPERS", specialization: "Cyber Recon / Counterintelligence", alias: "Ghostline", ops_completed: 43, success_rate: 96, photo: "danpus pdh.jpg" },
-    { nama_lengkap: "Bima Pratama", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1980-06-15", kewarganegaraan: "Indonesia", tempat_lahir: "Jakarta", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-2", unit: "DISPERS", specialization: "Field Ops", alias: "Shadow Hawk", ops_completed: 39, success_rate: 92, photo: "https://i.pravatar.cc/150?img=14" },
-    { nama_lengkap: "Citra Sari", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Perempuan", tanggal_lahir: "1985-03-22", kewarganegaraan: "Indonesia", tempat_lahir: "Bandung", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-1", unit: "DISPERS", specialization: "Signal Intelligence", alias: "Night Owl", ops_completed: 41, success_rate: 95, photo: "https://i.pravatar.cc/150?img=15" },
-    { nama_lengkap: "Dedi Hartono", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1982-11-30", kewarganegaraan: "Indonesia", tempat_lahir: "Surabaya", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-4", unit: "DISPERS", specialization: "Recon Ops", alias: "Silver Fox", ops_completed: 37, success_rate: 90, photo: "https://i.pravatar.cc/150?img=16" },
-    { nama_lengkap: "Erika Nurhaliza", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Perempuan", tanggal_lahir: "1987-07-09", kewarganegaraan: "Indonesia", tempat_lahir: "Medan", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-5", unit: "DISPERS", specialization: "Data Analyst", alias: "Crystal Byte", ops_completed: 45, success_rate: 93, photo: "https://i.pravatar.cc/150?img=17" },
-    { nama_lengkap: "Fauzan Ridho", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1983-04-11", kewarganegaraan: "Indonesia", tempat_lahir: "Bogor", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-3", unit: "DISPERS", specialization: "Logistics", alias: "Iron Mule", ops_completed: 33, success_rate: 91, photo: "https://i.pravatar.cc/150?img=18" },
-    { nama_lengkap: "Gilang Setiawan", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1981-01-19", kewarganegaraan: "Indonesia", tempat_lahir: "Cilacap", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-2", unit: "DISPERS", specialization: "Signal Jamming", alias: "Radio Ghost", ops_completed: 29, success_rate: 88, photo: "https://i.pravatar.cc/150?img=19" },
-    { nama_lengkap: "Hana Yuliana", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Perempuan", tanggal_lahir: "1988-10-24", kewarganegaraan: "Indonesia", tempat_lahir: "Solo", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-2", unit: "DISPERS", specialization: "Tactical Planning", alias: "Steel Rose", ops_completed: 40, success_rate: 94, photo: "https://i.pravatar.cc/150?img=20" },
-    { nama_lengkap: "Imam Rosyid", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1984-02-08", kewarganegaraan: "Indonesia", tempat_lahir: "Padang", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-3", unit: "DISPERS", specialization: "Weapon Specialist", alias: "Gunmetal", ops_completed: 38, success_rate: 90, photo: "https://i.pravatar.cc/150?img=21" },
-    { nama_lengkap: "Joko Santoso", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1986-09-14", kewarganegaraan: "Indonesia", tempat_lahir: "Semarang", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-1", unit: "DISPERS", specialization: "Encryption / Decryption", alias: "Cipher", ops_completed: 46, success_rate: 95, photo: "https://i.pravatar.cc/150?img=22" },
+let files = [];
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("fileInput");
+const fileList = document.getElementById("fileList");
+const clearBtn = document.getElementById("clearBtn");
+const uploadBtn = document.getElementById("uploadBtn");
+const count = document.getElementById("count");
+const barContainer = document.getElementById("progressBarContainer");
+const bar = document.getElementById("progressBar");
 
-    // ==== 10 anggota DISLOG ====
-    { nama_lengkap: "Endriady, S.H", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1979-05-03", kewarganegaraan: "Indonesia", tempat_lahir: "Subang", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-3", unit: "DISLOG", specialization: "Cyber Recon / Counterintelligence", alias: "Ghostline", ops_completed: 43, success_rate: 96, photo: "danpus pdh.jpg" },
-    { nama_lengkap: "Bima Pratama", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1980-06-15", kewarganegaraan: "Indonesia", tempat_lahir: "Jakarta", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-2", unit: "DISLOG", specialization: "Field Ops", alias: "Shadow Hawk", ops_completed: 39, success_rate: 92, photo: "https://i.pravatar.cc/150?img=14" },
-    { nama_lengkap: "Citra Sari", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Perempuan", tanggal_lahir: "1985-03-22", kewarganegaraan: "Indonesia", tempat_lahir: "Bandung", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-1", unit: "DISLOG", specialization: "Signal Intelligence", alias: "Night Owl", ops_completed: 41, success_rate: 95, photo: "https://i.pravatar.cc/150?img=15" },
-    { nama_lengkap: "Dedi Hartono", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1982-11-30", kewarganegaraan: "Indonesia", tempat_lahir: "Surabaya", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-4", unit: "DISLOG", specialization: "Recon Ops", alias: "Silver Fox", ops_completed: 37, success_rate: 90, photo: "https://i.pravatar.cc/150?img=16" },
-    { nama_lengkap: "Erika Nurhaliza", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Perempuan", tanggal_lahir: "1987-07-09", kewarganegaraan: "Indonesia", tempat_lahir: "Medan", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-5", unit: "DISLOG", specialization: "Data Analyst", alias: "Crystal Byte", ops_completed: 45, success_rate: 93, photo: "https://i.pravatar.cc/150?img=17" },
-    { nama_lengkap: "Fauzan Ridho", pangkat: "Penata Tk.I IIId", jenis_kelamin: "Laki-Laki", tanggal_lahir: "1983-04-11", kewarganegaraan: "Indonesia", tempat_lahir: "Bogor", status: "Tur Adminper Dispers Puslat Kodiklatau", clearance: "OMEGA-3", unit: "DISLOG", specialization: "Logistics", alias: "Iron Mule", ops_completed: 33, success_rate: 91, photo: "https://i.pravatar.cc/150?img=18" },
-    
-];
-
-const searchInput = document.getElementById("search");
-const dossierEl = document.getElementById("agent-dossier");
-const photoEl = document.getElementById("agent-photo");
-const memberBtnContainer = document.getElementById("member-buttons");
-const agentContainer = document.getElementById("agent-container");
-const outputPanel = document.getElementById("output");
-
-function typeWriter(element, text, agent, callback, speed=2){
-    element.textContent = "";
-    let i = 0;
-    let nameShown = false;
-
-    function typing() {
-        if(i < text.length){
-            element.textContent += text.charAt(i);
-            if(!nameShown && element.textContent.includes("NAMA LENGKAP")){
-                nameShown = true;
-                setTimeout(()=>{
-                    photoEl.src = agent.photo;
-                    photoEl.style.display = "block";
-                    setTimeout(()=> photoEl.style.opacity = 1, 100);
-                }, 200);
-            }
-            i++;
-            outputPanel.scrollTop = outputPanel.scrollHeight;
-            setTimeout(typing, speed);
-        } else if(callback) callback();
-    }
-    typing();
+function renderList(){
+  fileList.innerHTML = "";
+  files.forEach((f,i)=>{
+    let li = document.createElement("li");
+    li.className = "file-item";
+    li.innerHTML = `<div>${f.name} <div class="small">${(f.size/1024).toFixed(1)} KB</div></div>
+                    <button class="btn" onclick="removeFile(${i})">Hapus</button>`;
+    fileList.appendChild(li);
+  });
+  count.textContent = files.length + " file";
 }
 
-function simulateAccessSequence(element, callback){
-    const steps = [
-        ">>> initializing connection...",
-        ">>> accessing database node...",
-        ">>> verifying security clearance...",
-        ">>> clearance level verified ✔",
-        ">>> retrieving personnel data..."
-    ];
-    let i=0;
-    element.textContent="";
-    function nextStep(){
-        if(i<steps.length){
-            element.textContent += steps[i] + "\n";
-            outputPanel.scrollTop = outputPanel.scrollHeight;
-            i++;
-            setTimeout(nextStep, 600);
-        } else {
-            setTimeout(callback, 600);
-        }
-    }
-    nextStep();
-}
+function removeFile(index){ files.splice(index,1); renderList(); }
 
-function showMemberButtons(keyword){
-    memberBtnContainer.innerHTML = "";
-    const filtered = personnelDB.filter(p => 
-        p.unit.toLowerCase().includes(keyword.toLowerCase()) ||
-        p.nama_lengkap.toLowerCase().includes(keyword.toLowerCase()) ||
-        (p.real_name && p.real_name.toLowerCase().includes(keyword.toLowerCase()))
-    );
-    if(filtered.length===0){
-        memberBtnContainer.innerHTML='<span class="not-found">❌ Tidak ada anggota ditemukan untuk keyword ini.</span>';
-    } else {
-        filtered.forEach(agent=>{
-            const btn = document.createElement("button");
-            btn.textContent = agent.nama_lengkap;
-            btn.onclick = ()=> displayAgent(agent);
-            memberBtnContainer.appendChild(btn);
-        });
-    }
-}
+drop.addEventListener("click", e=>{ if(e.target===drop) fileInput.click(); });
+fileInput.addEventListener("change", ()=>{ [...fileInput.files].forEach(f=>files.push(f)); renderList(); });
+clearBtn.addEventListener("click", ()=>{ files=[]; fileInput.value=""; renderList(); });
 
-function displayAgent(agent){
-    dossierEl.textContent = "";
-    photoEl.style.display = "none";
-    photoEl.style.opacity = 0;
-    photoEl.src = "";
-    const oldBtn = agentContainer.querySelector(".reset-btn");
-    if(oldBtn) oldBtn.remove();
+["dragenter","dragover"].forEach(evt=>drop.addEventListener(evt,e=>{e.preventDefault();drop.classList.add("dragover");}));
+["dragleave","drop"].forEach(evt=>drop.addEventListener(evt,e=>{e.preventDefault();drop.classList.remove("dragover");}));
+drop.addEventListener("drop", e=>{ [...e.dataTransfer.files].forEach(f=>files.push(f)); renderList(); });
 
-    simulateAccessSequence(dossierEl, ()=> {
-        const dossier = `
-========================================
-|   FILE: PERSONNEL PUSLAT KODILATAU   |
-|   CLASSIFICATION: RAHASIA            |
-========================================
+function toBase64(file){ return new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.readAsDataURL(file); reader.onload=()=>resolve(reader.result); reader.onerror=err=>reject(err); }); }
 
-[IDENTITY DATA]
---------------------------------------------------
-NAMA LENGKAP   : ${agent.nama_lengkap}
-PANGKAT        : ${agent.pangkat}
-JENIS KELAMIN  : ${agent.jenis_kelamin}
-TANGGAL LAHIR  : ${agent.tanggal_lahir}
-KEWARGANEGARAAN: ${agent.kewarganegaraan}
-TEMPAT LAHIR   : ${agent.tempat_lahir}
-JABATAN        : ${agent.jabatan}
-CLEARANCE LVL  : ${agent.clearance}
-
-[OPERATIONAL RECORD]
---------------------------------------------------
-ASSIGNED UNIT  : ${agent.unit}
-SPECIALIZATION : ${agent.specialization}
-COMPLETED OPS  : ${agent.ops_completed}
-SUCCESS RATE   : ${agent.success_rate}%
-KNOWN ALIASES  : ${agent.alias}
-
-[SECURITY FOOTNOTE]
---------------------------------------------------
-This dossier is property of the Directorate of Covert Operations.
-Unauthorized access or duplication is punishable under Directive 47-A.
-
-<END OF FILE>
-========================================
-Retrieved on: ${new Date().toLocaleString()}
-        `;
-        typeWriter(dossierEl, dossier, agent, ()=> {
-            const backBtn = document.createElement("button");
-            backBtn.className = "reset-btn";
-            backBtn.textContent = "Document";
-            backBtn.onclick = () => {
-                window.location.href = "https://drive.google.com/file/d/1NocuG9rBdBaAGtIMUGWv4YfOMdvaHhEy/view?usp=drive_link";
-                photoEl.style.display = "none";
-                photoEl.src = "";
-                photoEl.style.opacity = 0;
-                backBtn.remove();
-            };
-            agentContainer.appendChild(backBtn);
-        });
-    });
-}
-
-searchInput.addEventListener("input", ()=>{
-    dossierEl.textContent="Biodata will appear after clicking the member button";
-    
-    if(btn) btn.remove();
-    memberBtnContainer.innerHTML="";
-});
-
-searchInput.addEventListener("keydown", e=>{
-    if(e.key==="Enter"){
-        const query = searchInput.value.trim();
-        if(query) showMemberButtons(query);
-    }
+uploadBtn.addEventListener("click", async ()=>{
+  if(files.length===0){ alert("Belum ada file."); return; }
+  barContainer.style.display="block";
+  for(let i=0;i<files.length;i++){
+    const file=files[i];
+    const base64=await toBase64(file);
+    const form=new URLSearchParams();
+    form.append("name",file.name);
+    form.append("type",file.type);
+    form.append("file",base64.split(',')[1]);
+    try{
+      const res=await fetch(WEBAPP_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:form});
+      const result=await res.json();
+      if(result.status!=="success"){ alert("Gagal upload: "+result.message); return; }
+      bar.style.width = Math.round(((i+1)/files.length)*100)+"%";
+    } catch(err){ alert("Gagal upload: "+err.message); return; }
+  }
+  alert("Upload berhasil!");
+  files=[]; fileInput.value=""; renderList();
 });
 </script>
+
 </body>
 </html>
