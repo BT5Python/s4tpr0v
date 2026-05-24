@@ -16,7 +16,8 @@ header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
 h1{margin:0;font-size:20px}
 .uploader{display:grid;grid-template-columns:1fr 300px;gap:20px}
 @media(max-width:850px){.uploader{grid-template-columns:1fr}}
-.drop{background:rgba(255,255,255,0.03);border-radius:10px;border:1px dashed rgba(255,255,255,0.08);padding:22px;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.2s;cursor:pointer}
+.drop{background:rgba(255,255,255,0.03);border-radius:10px;border:1px dashed rgba(255,255,255,0.08);padding:22px;min-height:auto;display:flex;flex-direction:column;align-items:center;
+justify-content:center;transition:.2s;cursor:default;}
 .drop.dragover{border-color:var(--accent);transform:translateY(-4px)}
 .hint{color:var(--muted);text-align:center;margin-top:8px}
 .controls{display:flex;gap:10px;margin-top:10px}
@@ -40,7 +41,6 @@ footer{margin-top:16px;display:flex;justify-content:space-between;align-items:ce
   animation: blinkFast 0.5s infinite;
   -webkit-animation: blinkFast 0.5s infinite;
 }
-
 @keyframes blinkFast {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -65,15 +65,83 @@ footer{margin-top:16px;display:flex;justify-content:space-between;align-items:ce
   body {
   position: relative;
 }
+@keyframes blinkMonitor{
+0%,100%{
+opacity:1;
+}
+50%{
+opacity:.2;
+}
+}
+
+/* TOMBOL MONITORING */
+
+.monitor-btn{
+padding:10px 16px;
+background:linear-gradient(180deg,#000,#050505);
+border-radius:5px;
+font-family:Courier New;
+font-weight:normal;
+cursor:pointer;
+transition:.25s;
+}
+.monitor-btn.pusdatin{
+background:black;
+color:#00ff00;
+border:1px solid #00ff00;
+}
+.monitor-btn.library{
+background:black;
+color:#00ff00;
+border:1px solid #00ff00;
+}
+.monitor-btn.daftar-personel{
+background:black;
+color:#00ff00;
+border:1px solid #777B7E;
+}
+.monitor-btn.pusdatin:hover{
+background:#00ff00;
+color:black;
+}
+.monitor-btn.library:hover{
+background:#00ff00;
+color:black;
+}
+.monitor-btn.daftar-personel:hover{
+background:#00ff00;
+color:black;
+}
+.monitor-wrap{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+margin-top:25px;
+}
+.dropdown-content button:hover{
+background:#00ff00;
+color:black;
+}
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <div class="card">
-
+  <div class="card">  
     <div class="running-text">
       <span>ATTENTION: MAKE SURE THE UPLOADED FILE IS IN THE CORRECT FORMAT AND DOES NOT EXCEED THE LIMIT</span>
+    </div>
+    <div id="sessionTimer"
+    style="
+    text-align:center;
+    color:#ff3333;
+    font-weight:bold;
+    font-family:Courier New;
+    margin-bottom:12px;
+    font-size:14px;
+    text-shadow:0 0 5px red;">
+    SESSION : <span id="countdown">00:10:000</span>
     </div>
 
     <header>
@@ -84,9 +152,8 @@ footer{margin-top:16px;display:flex;justify-content:space-between;align-items:ce
         <p style="font-size:12px;color:#ffff00">
         DATE/TIME : <span class="code-private" id="tanggal"></span>
         </p>
-      </div>
-   </header>
-
+      </div>      
+   </header>    
 
     <section class="uploader">
       <div>
@@ -98,27 +165,68 @@ footer{margin-top:16px;display:flex;justify-content:space-between;align-items:ce
           </svg>
           <div class="hint">
             <div style="font-weight:700; color: #00ff00">Tarik & lepaskan file di sini</div>
-            <div class="small">atau gunakan tombol di bawah</div>
-            <div class="controls">
-              <label class="btn primary" for="fileInput">Pilih File</label>
-              <button class="btn" id="clearBtn">Bersihkan</button>
-              <input id="fileInput" type="file" multiple>
+            <div
+            class="small"
+            style="
+            font-family: Lucida Console;
+            ">
+            
             </div>
-          </div>
+            <div class="controls">
+              <label class="btn primary" for="fileInput">Pilih File</label>              
+              <button class="btn" id="clearBtn">Bersihkan</button>              
+              <input id="fileInput" type="file" multiple>              
+            </div>
+            <div class="monitor-wrap">
+            <div id="monitoringText"
+            style="
+            font-family:Courier New;
+            font-size:13px;
+            color:#ffff00;
+            letter-spacing:1px;
+            text-shadow:0 0 5px red;
+            animation:blinkMonitor .8s infinite;">
+            MONITORING
+            </div>
+            
+            <select
+            id="monitorMenu"
+            style="
+            width:180px;
+            padding:8px;
+            background:black;
+            color:#00ff00;
+            border:1px solid rgba(255,255,255,.2);
+            border-radius:5px;
+            font-family:Courier New;">
+            
+            <option value="">
+            PILIH MENU
+            </option>            
+            <option value="https://bt5python.github.io/---12-_-3-642_-/bankfile.html">
+            PUSDATIN
+            </option>            
+            <option value="https://bt5python.github.io/---12-_-3-642_-/sisteminformasi.html">
+            LIBRARY
+            </option>            
+            <option value="https://bt5python.github.io/---12-_-3-642_-/personelpuslat.html">
+            DAFTAR PERSONEL
+            </option>            
+            </select>            
+            </div>
+          </div>  
         </div>
-      </div>
+      </div>      
 
-      <aside class="side">       
+      <aside class="side">  
 
  <div style="margin-top:10px">
-
 <label class="small">
 Folder Utama
 </label>
 
 <select
 id="rootFolder"
-
 style="
 width:100%;
 margin-top:6px;
@@ -130,27 +238,17 @@ border-radius:8px;
 font-family: Courier New;
 font-size:14px;
 font-weight:Normal;">
-
 <option value=
 "BANK DOCUMENTS">
-
 PUSDATIN
-
 </option>
-
 <option value=
 "SATKER PUSLAT KODIKLATAU">
-
 LIBRARY
-
 </option>
-
 </select>
-
 </div>
-
 <div style="margin-top:10px">
-
 <label class="small">
 Sub Folder
 </label>
@@ -170,7 +268,6 @@ border-radius:8px;
 font-family: Courier New;
 font-size:14px;
 font-weight:Normal;">
-
 </div>
         <strong>File dipilih</strong>
         <p class="small">Daftar file yang akan diupload.</p>
@@ -185,10 +282,8 @@ font-weight:Normal;">
     <div id="progressBarContainer">
       <div id="progressBar"></div>
     </div>
-
   </div>
 </div>
-
 <script>
 const WEBAPP_URL =
 "https://script.google.com/macros/s/AKfycbzpdBDipLVv0loZYU4Z1cmzahoC-sGKZ1T8H_QRPZ-ABRRqy0G8m0kw1-hczlJuP7xVtg/exec";
@@ -213,10 +308,7 @@ function renderList(){
   });
   count.textContent = files.length + " file";
 }
-
 function removeFile(index){ files.splice(index,1); renderList(); }
-
-drop.addEventListener("click", e=>{ if(e.target===drop) fileInput.click(); });
 fileInput.addEventListener("change", ()=>{ [...fileInput.files].forEach(f=>files.push(f)); renderList(); });
 clearBtn.addEventListener("click", ()=>{ files=[]; fileInput.value=""; renderList(); });
 
@@ -229,14 +321,12 @@ function toBase64(file){ return new Promise((resolve,reject)=>{ const reader=new
 uploadBtn.addEventListener(
 "click",
 async ()=>{
-
 const rootFolder =
 document
 .getElementById(
 "rootFolder"
 )
 .value;
-
 const subFolder =
 document
 .getElementById(
@@ -244,69 +334,49 @@ document
 )
 .value
 .trim();
-
 const folderTujuan =
-
 subFolder===""
-
 ? rootFolder
-
 : rootFolder+
 "/"+
 subFolder;
-
 if(
 folderTujuan===""
 ){
-
 alert(
 "Isi tujuan folder"
 );
-
 return;
-
 }
-
 if(files.length===0){
 alert("Belum ada file");
 return;
 }
-
 barContainer.style.display="block";
 bar.style.width="0%";
-
 for(let i=0;i<files.length;i++){
-
 const file=files[i];
-
 const base64=
 await toBase64(file);
-
 const form=
 new URLSearchParams();
-
 form.append(
 "name",
 file.name
 );
-
 form.append(
 "type",
 file.type
 );
-
 form.append(
 "file",
 base64.split(',')[1]
 );
-
 form.append(
 "folder",
 folderTujuan
 );
-
 try{
-
 const res=
 await fetch(
 WEBAPP_URL,
@@ -319,10 +389,8 @@ headers:{
 body:form
 }
 );
-
 const result=
 await res.json();
-
 if(result.status!=="success"){
 alert(
 "Gagal upload : "+
@@ -330,39 +398,29 @@ result.message
 );
 return;
 }
-
 bar.style.width=
 Math.round(
 ((i+1)
 /files.length)
 *100
 )+"%";
-
 }catch(err){
-
 alert(
 "Gagal : "+
 err.message
 );
-
 return;
-
 }
-
 }
-
 alert(
 "UPLOAD BERHASIL\n\n"+
 "FOLDER : "+
 folderTujuan
 );
-
 files=[];
 fileInput.value="";
 renderList();
-
 bar.style.width="0%";
-
 });
 </script>
 <script>
@@ -422,7 +480,7 @@ function heartbeat(){
 
 setInterval(heartbeat, 2000);
 </script>
-  <script>
+<script>
 function tampilkanTanggal() {
   const now = new Date();
 
@@ -442,6 +500,116 @@ function tampilkanTanggal() {
 // update tiap detik biar live
 setInterval(tampilkanTanggal, 1000);
 tampilkanTanggal();
+</script>
+<script>
+let defaultTime =
+60*1000;
+let totalMs =
+defaultTime;
+let timerLoop =
+null;
+const countdown =
+document.getElementById(
+"countdown"
+);
+function resetTimer(){
+totalMs =
+defaultTime;
+}
+[
+"click",
+"keydown",
+"mousemove",
+"touchstart",
+"drop"
+].forEach(
+evt=>
+document.addEventListener(
+evt,
+resetTimer
+)
+);
+function startSession(){
+// hentikan timer lama
+if(timerLoop){
+clearInterval(
+timerLoop
+);
+}
+timerLoop =
+setInterval(()=>{
+totalMs -= 10;
+if(totalMs <= 0){
+clearInterval(
+timerLoop
+);
+timerLoop =
+null;
+countdown.textContent =
+"00:00:000";
+// paksa tutup halaman lama
+window.location.replace(
+"index.html"
+);
+return;
+}
+const m =
+String(
+Math.floor(
+totalMs/60000
+)
+).padStart(2,"0");
+const d =
+String(
+Math.floor(
+(totalMs%60000)/1000
+)
+).padStart(2,"0");
+const ms =
+String(
+totalMs%1000
+).padStart(3,"0");
+countdown.textContent =
+`${m}:${d}:${ms}`;
+},10);
+}
+startSession();
+// kalau halaman ditinggal → matikan timer
+window.addEventListener(
+"pagehide",
+()=>{
+clearInterval(
+timerLoop
+);
+}
+);
+window.addEventListener(
+"beforeunload",
+()=>{
+clearInterval(
+timerLoop
+);
+}
+);
+</script>
+<script>
+document
+.getElementById(
+"monitorMenu"
+)
+.addEventListener(
+"change",
+function(){
+
+if(
+this.value!==""
+){
+window.location.href=
+this.value;
+}
+
+}
+);
 </script>
 </body>
 </html>
